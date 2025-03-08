@@ -570,7 +570,7 @@ function App() {
                     <span>Urgent: 150 children waiting</span>
                   </div>
                   <button 
-                    onClick={() => setDonationModal({ isOpen: true, type: 'education', amount: '', step: 1 })}
+                    onClick={() => window.location.href = 'https://store.pesapal.com/globaldonation'}
                     className="w-full py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors duration-300 flex items-center justify-center"
                   >
                     Support Education
@@ -612,7 +612,7 @@ function App() {
                     <span>Critical: 300 patients waiting</span>
                   </div>
                   <button 
-                    onClick={() => setDonationModal({ isOpen: true, type: 'healthcare', amount: '', step: 1 })}
+                    onClick={() => window.location.href = 'https://store.pesapal.com/globaldonation'}
                     className="w-full py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors duration-300 flex items-center justify-center"
                   >
                     Provide Healthcare
@@ -654,7 +654,7 @@ function App() {
                     <span>Ongoing: 500 families to feed</span>
                   </div>
                   <button 
-                    onClick={() => setDonationModal({ isOpen: true, type: 'food', amount: '', step: 1 })}
+                    onClick={() => window.location.href = 'https://store.pesapal.com/globaldonation'}
                     className="w-full py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors duration-300 flex items-center justify-center"
                   >
                     Feed Families
@@ -979,7 +979,7 @@ function App() {
                       </option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                 </div>
               </div>
 
@@ -1047,6 +1047,7 @@ function App() {
                             onChange={(e) => handleInputChange(field.key, e.target.value)}
                             placeholder={field.label}
                             className="block w-full pl-12 pr-4 py-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                            style={{ width: '100%' }}
                           />
                         </div>
                       </div>
@@ -1174,10 +1175,7 @@ function App() {
 
                 <div className="flex items-center space-x-4 mt-6 animate-fadeIn">
                   <button
-                    onClick={() => {
-                      setShowCalculator(false);
-                      setDonationModal({ isOpen: true, type: 'general', amount: '', step: 1 });
-                    }}
+                    onClick={() => window.location.href = 'https://store.pesapal.com/globaldonation'}
                     className="w-full bg-emerald-600 text-white py-4 px-6 rounded-xl hover:bg-emerald-700 transition-colors duration-300 flex items-center justify-center gap-2 text-base md:text-lg"
                   >
                     <HandHeart className="w-5 h-5 md:w-6 md:h-6" /> Contribute Now
@@ -1312,7 +1310,7 @@ function App() {
                     onClick={() => donationModal.amount && setDonationModal(prev => ({ ...prev, step: 2 }))}
                     disabled={!donationModal.amount}
                     className={`
-                      mt-6 w-full py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold flex items-center justify-center space-x-2
+                      mt-6 w-full py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold flex items-center justify-center gap-3
                       ${donationModal.amount 
                         ? 'bg-emerald-600 text-white hover:bg-emerald-700' 
                         : 'bg-gray-100 text-gray-400 cursor-not-allowed'}
@@ -1420,14 +1418,10 @@ function App() {
                       Back
                     </button>
                     <button
-                      onClick={() => {
-                        // Handle donation submission here
-                        setDonationModal({ isOpen: false, type: null, amount: '', step: 1 });
-                      }}
+                      onClick={() => window.location.href = 'https://store.pesapal.com/globaldonation'}
                       className="flex-1 py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors duration-300"
                     >
-                      <HandHeart className="w-5 h-5" />
-                      Donate Now
+                      <HandHeart className="w-5 h-5" /> Donate Now
                     </button>
                   </div>
                 </div>
