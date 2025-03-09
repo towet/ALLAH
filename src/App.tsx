@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, Coins, Users, Home, Calculator, ArrowRight, Moon, HandHeart, Wallet, Globe, Target, Clock, Share2, Utensils, GraduationCap, ChevronDown, X, DollarSign, Percent, Plus, Minus } from 'lucide-react';
+import { Heart, Coins, Users, Home, Calculator, ArrowRight, Moon, HandHeart, Wallet, Globe, Target, Clock, Share2, Utensils, GraduationCap, ChevronDown, X, DollarSign, Percent, Plus, Minus, Menu } from 'lucide-react';
 import CountUp from 'react-countup';
 import { useInView } from 'react-intersection-observer';
 
@@ -8,10 +8,41 @@ function App() {
   const [zakatAmount, setZakatAmount] = useState<number | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [currentImpactIndex, setCurrentImpactIndex] = useState(0);
+  const [selectedCurrency, setSelectedCurrency] = useState('USD');
+  const [showCalculator, setShowCalculator] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState(-1);
+  const [emergencyModal, setEmergencyModal] = useState(false);
+  const [donationModal, setDonationModal] = useState<{
+    isOpen: boolean;
+    type: 'emergency' | 'education' | 'healthcare' | 'food' | 'general' | null;
+    amount: string;
+    step: number;
+  }>({
+    isOpen: false,
+    type: null,
+    amount: '',
+    step: 1
+  });
+  const [calculatorStep, setCalculatorStep] = useState(1);
+  const [zakatInputs, setZakatInputs] = useState({
+    cash: '',
+    gold: '',
+    silver: '',
+    stocks: '',
+    realEstate: '',
+    business: '',
+    other: '',
+    debts: '',
+  });
+  const [exchangeRate, setExchangeRate] = useState(1);
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
+  const [ref1, inView1] = useInView({ triggerOnce: true, threshold: 0.2 });
+  const [ref2, inView2] = useInView({ triggerOnce: true, threshold: 0.2 });
+  const [ref3, inView3] = useInView({ triggerOnce: true, threshold: 0.2 });
 
   const emergencyImages = [
     "https://www.hrw.org/sites/default/files/styles/embed_xxl/public/media_2024/11/202411mena_ip_gaza_almawasi_camp_airstrike.jpg",
@@ -67,21 +98,6 @@ function App() {
       emphasis: "Your compassion nurtures souls"
     }
   ];
-
-  const [showCalculator, setShowCalculator] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState('USD');
-  const [exchangeRate, setExchangeRate] = useState(1);
-  const [calculatorStep, setCalculatorStep] = useState(1);
-  const [zakatInputs, setZakatInputs] = useState({
-    cash: '',
-    gold: '',
-    silver: '',
-    stocks: '',
-    realEstate: '',
-    business: '',
-    other: '',
-    debts: '',
-  });
 
   const currencies = [
     { code: 'USD', symbol: '$', name: 'US Dollar' },
@@ -195,6 +211,10 @@ function App() {
     }
   };
 
+  const monthlyGoal = 1000000;
+  const currentProgress = 750000;
+  const progressPercentage = (currentProgress / monthlyGoal) * 100;
+
   const impactStats = [
     {
       icon: <Users className="w-8 h-8 md:w-10 md:h-10" />,
@@ -216,32 +236,58 @@ function App() {
     }
   ];
 
-  const monthlyGoal = 1000000;
-  const currentProgress = 750000;
-  const progressPercentage = (currentProgress / monthlyGoal) * 100;
-
-  const [ref1, inView1] = useInView({ triggerOnce: true, threshold: 0.2 });
-  const [ref2, inView2] = useInView({ triggerOnce: true, threshold: 0.2 });
-  const [ref3, inView3] = useInView({ triggerOnce: true, threshold: 0.2 });
-
-  const [openFaq, setOpenFaq] = useState(-1);
-  const [emergencyModal, setEmergencyModal] = useState(false);
-  const [donationModal, setDonationModal] = useState<{
-    isOpen: boolean;
-    type: 'emergency' | 'education' | 'healthcare' | 'food' | 'general' | null;
-    amount: string;
-    step: number;
-  }>({
-    isOpen: false,
-    type: null,
-    amount: '',
-    step: 1
-  });
-
   return (
     <div className="min-h-screen bg-white">
+      <header className="fixed w-full top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
+        <nav className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <HandHeart className="w-7 h-7 text-emerald-600" />
+              <span className="ml-2 text-xl font-bold text-emerald-600" style={{ fontFamily: 'Noto Sans Arabic, sans-serif' }}>زكاة</span>
+            </div>
+            <div className="hidden md:flex items-center space-x-6">
+              <a href="#calculator" className="text-gray-600 hover:text-emerald-600 transition-colors">Calculator</a>
+              <a href="#impact" className="text-gray-600 hover:text-emerald-600 transition-colors">Impact</a>
+              <a href="#about" className="text-gray-600 hover:text-emerald-600 transition-colors">About</a>
+              <button 
+                onClick={() => setShowCalculator(true)}
+                className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2"
+              >
+                <Calculator size={18} />
+                Calculate Now
+              </button>
+            </div>
+            <button 
+              className="md:hidden text-gray-600 hover:bg-gray-100 p-2 rounded-lg"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+          {isMenuOpen && (
+            <div className="md:hidden mt-4 pb-4">
+              <div className="flex flex-col space-y-3">
+                <a href="#calculator" className="px-3 py-2 text-gray-600 hover:bg-emerald-50 rounded-lg" onClick={() => setIsMenuOpen(false)}>Calculator</a>
+                <a href="#impact" className="px-3 py-2 text-gray-600 hover:bg-emerald-50 rounded-lg" onClick={() => setIsMenuOpen(false)}>Impact</a>
+                <a href="#about" className="px-3 py-2 text-gray-600 hover:bg-emerald-50 rounded-lg" onClick={() => setIsMenuOpen(false)}>About</a>
+                <button 
+                  onClick={() => {
+                    setShowCalculator(true);
+                    setIsMenuOpen(false);
+                  }}
+                  className="mt-2 w-full px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
+                >
+                  <Calculator size={18} />
+                  Calculate Now
+                </button>
+              </div>
+            </div>
+          )}
+        </nav>
+      </header>
+
       {/* Hero Section with Impact Stats */}
-      <header className="relative min-h-[85vh] md:min-h-screen flex flex-col justify-center overflow-hidden bg-emerald-950 overflow-x-hidden">
+      <header className="relative min-h-[85vh] md:min-h-screen flex flex-col justify-center overflow-hidden bg-emerald-950 overflow-x-hidden pt-24">
         {/* Animated Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
@@ -966,7 +1012,7 @@ function App() {
 
               {/* Currency Selection */}
               <div className="mb-4 animate-fadeIn">
-                <label className="block text-sm font-medium text-gray-700 mb-3">Select Currency</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Select Currency</label>
                 <div className="relative">
                   <select
                     value={selectedCurrency}
@@ -994,14 +1040,13 @@ function App() {
                 <div className="flex justify-between mt-2">
                   {[1, 2, 3].map((step) => (
                     <div key={step} className="flex items-center">
-                      <div className={`
-                        w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold
                         ${calculatorStep >= step 
                           ? 'bg-emerald-500 text-white' 
                           : 'bg-emerald-100 text-emerald-600'
                         }
                         transition-all duration-300
-                      `}>
+                      ">
                         {step === 1 ? <DollarSign className="w-4 h-4" /> : <Heart className="w-4 h-4" />}
                       </div>
                       {step === 1 && (
@@ -1247,15 +1292,14 @@ function App() {
                 <div className="flex items-center justify-between mb-8">
                   {[1, 2].map((step) => (
                     <div key={step} className="flex items-center">
-                      <div className={`
-                        w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold
                         ${donationModal.step === step 
                           ? 'bg-emerald-600 text-white' 
                           : donationModal.step > step 
                             ? 'bg-emerald-100 text-emerald-600' 
                             : 'bg-gray-100 text-gray-400'}
                         transition-all duration-300
-                      `}>
+                      ">
                         {step === 1 ? <DollarSign className="w-4 h-4" /> : <Heart className="w-4 h-4" />}
                       </div>
                       {step === 1 && (
@@ -1272,19 +1316,16 @@ function App() {
                 <div className={`transition-all duration-300 transform ${donationModal.step === 1 ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 absolute'}`}>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Enter Your Donation Amount
-                      </label>
-                      <div className="relative rounded-md shadow-sm">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <span className="text-gray-500 sm:text-sm">$</span>
-                        </div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Enter Your Donation Amount</label>
+                      <div className="relative">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">$</div>
                         <input
                           type="number"
                           value={donationModal.amount}
                           onChange={(e) => setDonationModal(prev => ({ ...prev, amount: e.target.value }))}
-                          className="focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md py-3"
                           placeholder="0.00"
+                          className="pl-10 p-3 md:p-4 border-2 border-emerald-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all"
+                          style={{ width: '100%' }}
                         />
                       </div>
                     </div>
@@ -1312,7 +1353,7 @@ function App() {
                     onClick={() => donationModal.amount && setDonationModal(prev => ({ ...prev, step: 2 }))}
                     disabled={!donationModal.amount}
                     className={`
-                      mt-6 w-full py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold flex items-center justify-center gap-3
+                      mt-6 w-full py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold flex items-center justify-center space-x-2
                       ${donationModal.amount 
                         ? 'bg-emerald-600 text-white hover:bg-emerald-700' 
                         : 'bg-gray-100 text-gray-400 cursor-not-allowed'}
