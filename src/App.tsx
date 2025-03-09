@@ -1,7 +1,109 @@
-import React, { useState, useEffect } from 'react';
-import { Heart, Coins, Users, Home, Calculator, ArrowRight, Moon, HandHeart, Wallet, Globe, Target, Clock, Share2, Utensils, GraduationCap, ChevronDown, X, DollarSign, Percent, Plus, Minus, Menu } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Heart, Coins, Users, Home, Calculator, ArrowRight, HandHeart, Wallet, Globe, Target, Clock, Share2, Utensils, GraduationCap, ChevronDown, X, DollarSign, Plus, Minus, Menu } from 'lucide-react';
 import CountUp from 'react-countup';
 import { useInView } from 'react-intersection-observer';
+
+// Mock recent donations data with more variety
+const recentDonations = [
+  { 
+    amount: 150, 
+    name: "Sarah", 
+    location: "United Kingdom", 
+    timeAgo: "2 minutes",
+    avatar: "https://media.istockphoto.com/id/157400344/photo/happy-forties.jpg?s=612x612&w=0&k=20&c=hVK0eBwnrzWFS2inwHJHHRLTDzaKpqOZqzSaQWf85lc="
+  },
+  { 
+    amount: 500, 
+    name: "Ahmed", 
+    location: "UAE", 
+    timeAgo: "5 minutes",
+    avatar: "https://www.tuck.dartmouth.edu/uploads/profiles/alumni-story-ahmed-darwish.jpg"
+  },
+  { 
+    amount: 1000, 
+    name: "Mohammad", 
+    location: "Saudi Arabia", 
+    timeAgo: "10 minutes",
+    avatar: "https://frankknox.harvard.edu/sites/g/files/omnuum1561/files/styles/hwp_4_5__480x600/public/2024-08/Ahmed%20Kerwan.jpg?itok=lqb8qGXg"
+  },
+  { 
+    amount: 250, 
+    name: "Fatima", 
+    location: "Qatar", 
+    timeAgo: "15 minutes",
+    avatar: "https://www.africanstudies.ox.ac.uk/sites/default/files/africanstudies/images/media/fatuma_abdishukri.jpg"
+  },
+  { 
+    amount: 750, 
+    name: "Omar", 
+    location: "Kuwait", 
+    timeAgo: "20 minutes",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Omar&backgroundColor=c1f4c5"
+  },
+  { 
+    amount: 300, 
+    name: "Aisha", 
+    location: "Egypt", 
+    timeAgo: "25 minutes",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Aisha&backgroundColor=ffdfbf"
+  },
+  { 
+    amount: 450, 
+    name: "Hassan", 
+    location: "Jordan", 
+    timeAgo: "30 minutes",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Hassan&backgroundColor=c1f4c5"
+  },
+  { 
+    amount: 200, 
+    name: "Zainab", 
+    location: "Bahrain", 
+    timeAgo: "35 minutes",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zainab&backgroundColor=ffd5dc"
+  }
+];
+
+function DonationNotification({ donation, onClose }: { donation: typeof recentDonations[0], onClose: () => void }) {
+  return (
+    <div 
+      className="fixed bottom-4 right-4 bg-white rounded-lg shadow-xl p-4 max-w-sm transform transition-all duration-500 ease-in-out hover:scale-105"
+      style={{
+        animation: 'slideInRight 0.5s ease-out, fadeIn 0.5s ease-out',
+        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
+      }}
+    >
+      <div className="flex items-start gap-4">
+        <div className="flex-shrink-0">
+          <img 
+            src={donation.avatar} 
+            alt={`${donation.name}'s avatar`}
+            className="w-12 h-12 rounded-full border-2 border-emerald-100 object-cover"
+            style={{ backgroundColor: '#f3f4f6' }}
+          />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm text-gray-600">
+            <span className="font-semibold text-emerald-600">{donation.name}</span> from{' '}
+            <span className="text-gray-700">{donation.location}</span>
+          </p>
+          <p className="text-sm font-medium text-gray-800 mt-1">
+            Contributed <span className="text-emerald-600">${donation.amount}</span>
+          </p>
+          <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+            <Clock className="w-3 h-3" />
+            {donation.timeAgo} ago
+          </p>
+        </div>
+        <button 
+          onClick={onClose}
+          className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-full flex-shrink-0"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
 
 function App() {
   const [wealthAmount, setWealthAmount] = useState<string>('');
@@ -11,6 +113,8 @@ function App() {
   const [selectedCurrency, setSelectedCurrency] = useState('USD');
   const [showCalculator, setShowCalculator] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentDonation, setCurrentDonation] = useState<typeof recentDonations[0] | null>(null);
+  const [donationIndex, setDonationIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState(-1);
   const [emergencyModal, setEmergencyModal] = useState(false);
   const [donationModal, setDonationModal] = useState<{
@@ -35,11 +139,7 @@ function App() {
     other: '',
     debts: '',
   });
-  const [exchangeRate, setExchangeRate] = useState(1);
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
+
   const [ref1, inView1] = useInView({ triggerOnce: true, threshold: 0.2 });
   const [ref2, inView2] = useInView({ triggerOnce: true, threshold: 0.2 });
   const [ref3, inView3] = useInView({ triggerOnce: true, threshold: 0.2 });
@@ -236,8 +336,47 @@ function App() {
     }
   ];
 
+  // Handle donation notifications
+  useEffect(() => {
+    const showNextDonation = () => {
+      setCurrentDonation(recentDonations[donationIndex]);
+      setDonationIndex((prevIndex) => (prevIndex + 1) % recentDonations.length);
+    };
+
+    const notificationInterval = setInterval(() => {
+      showNextDonation();
+    }, 20000); // Show new donation every 20 seconds
+
+    // Show first donation after a delay
+    const initialTimeout = setTimeout(() => {
+      showNextDonation();
+    }, 5000); // Show first donation after 5 seconds
+
+    return () => {
+      clearInterval(notificationInterval);
+      clearTimeout(initialTimeout);
+    };
+  }, [donationIndex]);
+
+  // Auto-hide notification after 8 seconds
+  useEffect(() => {
+    if (currentDonation) {
+      const hideTimeout = setTimeout(() => {
+        setCurrentDonation(null);
+      }, 8000);
+
+      return () => clearTimeout(hideTimeout);
+    }
+  }, [currentDonation]);
+
   return (
     <div className="min-h-screen bg-white">
+      {currentDonation && (
+        <DonationNotification
+          donation={currentDonation}
+          onClose={() => setCurrentDonation(null)}
+        />
+      )}
       <header className="fixed w-full top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
         <nav className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
@@ -251,7 +390,7 @@ function App() {
               <a href="#about" className="text-gray-600 hover:text-emerald-600 transition-colors">About</a>
               <button 
                 onClick={() => setShowCalculator(true)}
-                className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2"
+                className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-300 flex items-center gap-2"
               >
                 <Calculator size={18} />
                 Calculate Now
@@ -275,7 +414,7 @@ function App() {
                     setShowCalculator(true);
                     setIsMenuOpen(false);
                   }}
-                  className="mt-2 w-full px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
+                  className="mt-2 w-full px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-300 flex items-center justify-center gap-2"
                 >
                   <Calculator size={18} />
                   Calculate Now
@@ -340,7 +479,7 @@ function App() {
           </div>
 
           {/* Impact Stats */}
-          <div ref={ref} className="relative overflow-x-hidden">
+          <div ref={ref1} className="relative overflow-x-hidden">
             <div className="grid grid-cols-3 gap-2 md:gap-4 max-w-3xl mx-auto mb-20 md:mb-24">
               {impactStats.map((stat, index) => (
                 <div key={index} className="text-center p-2 md:p-4 rounded-lg md:rounded-xl bg-emerald-800/50 backdrop-blur-lg border border-emerald-700/30 transform hover:scale-102 transition-all duration-300">
@@ -350,7 +489,7 @@ function App() {
                     </div>
                   </div>
                   <div className="text-xl md:text-3xl font-bold text-white">
-                    {inView && (
+                    {inView1 && (
                       <CountUp
                         end={stat.value}
                         duration={2}
@@ -360,7 +499,7 @@ function App() {
                       />
                     )}
                   </div>
-                  <div className="text-xs md:text-sm text-emerald-200">{stat.label}</div>
+                  <div className="text-xs text-emerald-200">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -1353,7 +1492,7 @@ function App() {
                     onClick={() => donationModal.amount && setDonationModal(prev => ({ ...prev, step: 2 }))}
                     disabled={!donationModal.amount}
                     className={`
-                      mt-6 w-full py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold flex items-center justify-center space-x-2
+                      mt-6 w-full py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold flex items-center justify-center gap-3
                       ${donationModal.amount 
                         ? 'bg-emerald-600 text-white hover:bg-emerald-700' 
                         : 'bg-gray-100 text-gray-400 cursor-not-allowed'}
@@ -1618,6 +1757,7 @@ function App() {
               Find answers to common questions about Zakat calculation and distribution
             </p>
           </div>
+
           <div 
             className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
             itemScope 
