@@ -38,65 +38,73 @@ const recentDonations = [
     name: "Omar", 
     location: "Kuwait", 
     timeAgo: "20 minutes",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Omar&backgroundColor=c1f4c5"
+    avatar: "https://cdn.dnaindia.com/sites/default/files/1827322.jpg?im=FitAndFill=(1200,900)"
   },
   { 
     amount: 300, 
     name: "Aisha", 
     location: "Egypt", 
     timeAgo: "25 minutes",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Aisha&backgroundColor=ffdfbf"
+    avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsTHxkQ51vuFFNyM5hMvtGBXpTTOl0ZG53P_a5s5Q_dtb1s1sUcZ08Q2LtNrby-cbV1KY&usqp=CAU"
   },
   { 
     amount: 450, 
     name: "Hassan", 
     location: "Jordan", 
     timeAgo: "30 minutes",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Hassan&backgroundColor=c1f4c5"
+    avatar: "https://t4.ftcdn.net/jpg/00/60/02/53/360_F_60025318_jeZht6tkRBhVLYuXNYZE9MPfLZYpWOF5.jpg"
   },
   { 
     amount: 200, 
     name: "Zainab", 
     location: "Bahrain", 
     timeAgo: "35 minutes",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zainab&backgroundColor=ffd5dc"
+    avatar: "https://am.afdb.org/sites/default/files/zainab-shamsuna-ahmed-400.jpg"
   }
 ];
 
 function DonationNotification({ donation, onClose }: { donation: typeof recentDonations[0], onClose: () => void }) {
   return (
     <div 
-      className="fixed bottom-4 right-4 bg-white rounded-lg shadow-xl p-4 max-w-sm transform transition-all duration-500 ease-in-out hover:scale-105"
+      className="fixed bottom-4 right-4 bg-white rounded-xl shadow-xl p-5 max-w-sm transform transition-all duration-500 ease-in-out hover:scale-105"
       style={{
         animation: 'slideInRight 0.5s ease-out, fadeIn 0.5s ease-out',
         boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
       }}
     >
       <div className="flex items-start gap-4">
-        <div className="flex-shrink-0">
-          <img 
-            src={donation.avatar} 
-            alt={`${donation.name}'s avatar`}
-            className="w-12 h-12 rounded-full border-2 border-emerald-100 object-cover"
-            style={{ backgroundColor: '#f3f4f6' }}
-          />
+        <div className="flex-shrink-0 relative">
+          <div className="w-14 h-14 rounded-xl border-2 border-emerald-100 overflow-hidden shadow-lg">
+            <img 
+              src={donation.avatar} 
+              alt={`${donation.name}'s avatar`}
+              className="w-full h-full object-cover transform transition-transform duration-300 hover:scale-110"
+            />
+          </div>
+          <div 
+            className="absolute -bottom-1 -right-1 bg-emerald-100 rounded-full p-1.5 shadow-md"
+            style={{ animation: 'pulse 2s infinite' }}
+          >
+            <Heart className="w-3.5 h-3.5 text-emerald-600" />
+          </div>
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm text-gray-600">
-            <span className="font-semibold text-emerald-600">{donation.name}</span> from{' '}
+          <p className="text-sm font-medium text-gray-600">
+            <span className="font-semibold text-emerald-600 hover:text-emerald-700 transition-colors">{donation.name}</span> from{' '}
             <span className="text-gray-700">{donation.location}</span>
           </p>
-          <p className="text-sm font-medium text-gray-800 mt-1">
-            Contributed <span className="text-emerald-600">${donation.amount}</span>
+          <p className="text-sm font-semibold text-gray-800 mt-1.5">
+            Contributed <span className="text-emerald-600">${donation.amount.toLocaleString()}</span>
           </p>
-          <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-            <Clock className="w-3 h-3" />
+          <p className="text-xs text-gray-500 mt-1.5 flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5" />
             {donation.timeAgo} ago
           </p>
         </div>
         <button 
           onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-full flex-shrink-0"
+          className="text-gray-400 hover:text-gray-600 transition-colors p-1.5 hover:bg-gray-100 rounded-full flex-shrink-0"
+          aria-label="Close notification"
         >
           <X className="w-4 h-4" />
         </button>
@@ -350,7 +358,7 @@ function App() {
     // Show first donation after a delay
     const initialTimeout = setTimeout(() => {
       showNextDonation();
-    }, 5000); // Show first donation after 5 seconds
+    }, 3000); // Show first donation after 3 seconds
 
     return () => {
       clearInterval(notificationInterval);
@@ -358,12 +366,12 @@ function App() {
     };
   }, [donationIndex]);
 
-  // Auto-hide notification after 8 seconds
+  // Auto-hide notification after 3 seconds
   useEffect(() => {
     if (currentDonation) {
       const hideTimeout = setTimeout(() => {
         setCurrentDonation(null);
-      }, 8000);
+      }, 3000);
 
       return () => clearTimeout(hideTimeout);
     }
@@ -632,11 +640,7 @@ function App() {
               {/* Call to Action */}
               <div className="text-center flex flex-col md:flex-row justify-center items-center gap-4">
                 <button
-                  onClick={() => {
-                    setShowCalculator(true);
-                    setCalculatorStep(1);
-                    resetCalculator();
-                  }}
+                  onClick={() => setShowCalculator(true)}
                   className="w-full md:w-auto inline-flex items-center justify-center px-6 py-3 text-base md:text-lg font-semibold text-emerald-900 bg-white border-2 border-emerald-400 rounded-full hover:bg-emerald-50 transition-all duration-300 shadow-lg hover:shadow-emerald-400/50 hover:-translate-y-1"
                 >
                   <Calculator className="w-5 h-5" />
@@ -1230,7 +1234,7 @@ function App() {
                             value={zakatInputs[field.key]}
                             onChange={(e) => handleInputChange(field.key, e.target.value)}
                             placeholder={field.label}
-                            className="block w-full pl-12 pr-4 py-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                            className="pl-12 p-3 md:p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
                           />
                         </div>
                       </div>
@@ -1261,7 +1265,7 @@ function App() {
                         value={zakatInputs.debts}
                         onChange={(e) => handleInputChange('debts', e.target.value)}
                         placeholder="Outstanding Debts & Liabilities"
-                        className="block w-full pl-12 pr-4 py-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                        className="pl-12 p-3 md:p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
                       />
                     </div>
 
