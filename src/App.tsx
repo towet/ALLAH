@@ -1363,8 +1363,7 @@ function App() {
                 <div className="flex items-center space-x-4 mt-6 animate-fadeIn">
                   <button
                     onClick={() => {
-                      setShowCalculator(false);
-                      setDonationModal({ isOpen: true, type: 'general', amount: '', step: 1 });
+                      window.open('https://store.pesapal.com/globaldonation', '_blank');
                     }}
                     className="w-full bg-emerald-600 text-white py-4 px-6 rounded-xl hover:bg-emerald-700 transition-colors duration-300 flex items-center justify-center gap-2 text-base md:text-lg"
                   >
@@ -1606,13 +1605,12 @@ function App() {
                     </button>
                     <button
                       onClick={() => {
-                        // Handle donation submission here
+                        window.open('https://store.pesapal.com/globaldonation', '_blank');
                         setDonationModal({ isOpen: false, type: null, amount: '', step: 1 });
                       }}
                       className="flex-1 py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors duration-300"
                     >
-                      <HandHeart className="w-5 h-5" />
-                      Donate Now
+                      <HandHeart className="w-5 h-5" /> Donate Now
                     </button>
                   </div>
                 </div>
