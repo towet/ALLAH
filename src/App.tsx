@@ -17,7 +17,7 @@ const recentDonations = [
     name: "Ahmed", 
     location: "UAE", 
     timeAgo: "5 minutes",
-    avatar: "https://www.tuck.dartmouth.edu/sites/g/files/omnuum1561/files/styles/hwp_4_5__480x600/public/2024-08/Ahmed%20Kerwan.jpg?itok=lqb8qGXg"
+    avatar: "https://www.tuck.dartmouth.edu/uploads/profiles/alumni-story-ahmed-darwish.jpg"
   },
   { 
     amount: 1000, 
@@ -611,7 +611,7 @@ function App() {
                     }`}
                   >
                     <div className="flex items-center space-x-3 mb-2">
-                      <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+                      <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-inner transform transition-transform duration-700 hover:scale-110 overflow-hidden">
                         {impact.icon}
                       </div>
                       <p className="text-base text-slate-700">{impact.text}</p>
@@ -1597,44 +1597,20 @@ function App() {
                   )}
 
                   <div className="flex items-center space-x-4 mt-6 animate-fadeIn">
-                    {donationModal.type === 'education' && (
-                      <button
-                        onClick={() => {
-                          window.open('https://store.pesapal.com/globaldonation', '_blank');
-                          setDonationModal({ isOpen: false, type: null, amount: '', step: 1 });
-                        }}
-                        className="flex-1 py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors duration-300"
-                      >
-                        <HandHeart className="w-5 h-5" /> Donate Now
-                      </button>
-                    )}
-                    {donationModal.type === 'healthcare' && (
-                      <button
-                        onClick={() => {
-                          window.open('https://store.pesapal.com/globaldonation', '_blank');
-                          setDonationModal({ isOpen: false, type: null, amount: '', step: 1 });
-                        }}
-                        className="flex-1 py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors duration-300"
-                      >
-                        <HandHeart className="w-5 h-5" /> Donate Now
-                      </button>
-                    )}
-                    {donationModal.type === 'food' && (
-                      <button
-                        onClick={() => {
-                          window.open('https://store.pesapal.com/globaldonation', '_blank');
-                          setDonationModal({ isOpen: false, type: null, amount: '', step: 1 });
-                        }}
-                        className="flex-1 py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors duration-300"
-                      >
-                        <HandHeart className="w-5 h-5" /> Donate Now
-                      </button>
-                    )}
                     <button
                       onClick={() => setDonationModal(prev => ({ ...prev, step: 1 }))}
                       className="flex-1 py-3 px-6 bg-white border-2 border-emerald-600 text-emerald-600 rounded-xl font-semibold hover:bg-emerald-50 transition-colors duration-300"
                     >
                       Back
+                    </button>
+                    <button
+                      onClick={() => {
+                        window.open('https://store.pesapal.com/globaldonation', '_blank');
+                        setDonationModal({ isOpen: false, type: null, amount: '', step: 1 });
+                      }}
+                      className="flex-1 py-3 px-6 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors duration-300"
+                    >
+                      <HandHeart className="w-5 h-5" /> Donate Now
                     </button>
                   </div>
                 </div>
@@ -1774,180 +1750,8 @@ function App() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-16 md:py-24 overflow-x-hidden">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-emerald-900 mb-4">
-              The Impact of Your Zakat
-            </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Real stories from people whose lives have been transformed through your generous Zakat contributions
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Testimonial 1 */}
-            <div 
-              ref={ref1}
-              className={`group relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-700 overflow-hidden transform hover:-translate-y-2 ${
-                inView1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-              style={{
-                transitionDelay: '0.2s',
-                backgroundImage: 'linear-gradient(to bottom right, rgba(255,255,255,0.9), rgba(255,255,255,0.95))',
-                backdropFilter: 'blur(8px)'
-              }}
-            >
-              <div className="aspect-[4/3] overflow-hidden">
-                <img
-                  src="https://media.globalcitizen.org/thumbnails/09/26/09263d10-69dc-45f4-921e-60f56eec8cac/education_in_madagascar.jpg__1600x900_q85_crop_subsampling-2.jpg"
-                  alt="Education impact in Madagascar"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <div className="mb-4 flex items-center">
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-100 text-emerald-600">
-                    <GraduationCap className="w-5 h-5" />
-                  </span>
-                  <h3 className="ml-3 text-xl font-semibold text-slate-900">Education for All</h3>
-                </div>
-                <blockquote className="text-slate-700 mb-4">
-                  "Thanks to your Zakat donations, my children can now attend school and have access to proper education. This has changed our lives forever."
-                </blockquote>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
-                    <img
-                      src="https://randomuser.me/api/portraits/women/42.jpg"
-                      alt="Testimonial author"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-slate-900">Amina S.</p>
-                    <p className="text-sm text-slate-500">Mother of three</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial 2 */}
-            <div 
-              ref={ref2}
-              className={`group relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-700 overflow-hidden transform hover:-translate-y-2 ${
-                inView2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-              style={{
-                transitionDelay: '0.4s',
-                backgroundImage: 'linear-gradient(to bottom right, rgba(255,255,255,0.9), rgba(255,255,255,0.95))',
-                backdropFilter: 'blur(8px)'
-              }}
-            >
-              <div className="aspect-[4/3] overflow-hidden">
-                <img
-                  src="https://hips.hearstapps.com/vidthumb/images/stitch-200622-icu-covid-survivor-10-1592856501.jpg"
-                  alt="Healthcare impact - ICU care"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <div className="mb-4 flex items-center">
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-100 text-emerald-600">
-                    <Heart className="w-5 h-5" />
-                  </span>
-                  <h3 className="ml-3 text-xl font-semibold text-slate-900">Life-Saving Care</h3>
-                </div>
-                <blockquote className="text-slate-700 mb-4">
-                  "The medical care provided through Zakat funds saved my father's life. We couldn't afford the treatment on our own."
-                </blockquote>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
-                    <img
-                      src="https://randomuser.me/api/portraits/men/32.jpg"
-                      alt="Testimonial author"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-slate-900">Hassan M.</p>
-                    <p className="text-sm text-slate-500">Grateful son</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial 3 */}
-            <div 
-              ref={ref3}
-              className={`group relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-700 overflow-hidden transform hover:-translate-y-2 ${
-                inView3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-              style={{
-                transitionDelay: '0.6s',
-                backgroundImage: 'linear-gradient(to bottom right, rgba(255,255,255,0.9), rgba(255,255,255,0.95))',
-                backdropFilter: 'blur(8px)'
-              }}
-            >
-              <div className="aspect-[4/3] overflow-hidden">
-                <img
-                  src="https://missionnewswire.org/wp-content/uploads/2016/06/Madagascar_ANS_06-09-2016.jpg"
-                  alt="Food security impact in Madagascar"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <div className="mb-4 flex items-center">
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-100 text-emerald-600">
-                    <Utensils className="w-5 h-5" />
-                  </span>
-                  <h3 className="ml-3 text-xl font-semibold text-slate-900">Food Security</h3>
-                </div>
-                <blockquote className="text-slate-700 mb-4">
-                  "Your Zakat helps us provide nutritious meals to hundreds of families every month. The impact on our community is immeasurable."
-                </blockquote>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
-                    <img
-                      src="https://randomuser.me/api/portraits/women/68.jpg"
-                      alt="Testimonial author"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-slate-900">Fatima R.</p>
-                    <p className="text-sm text-slate-500">Community Leader</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Decorative Elements */}
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-100 rounded-full opacity-20 blur-3xl"></div>
-          <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-emerald-200 rounded-full opacity-20 blur-3xl"></div>
-
-          {/* Add scroll-triggered animations */}
-          <style dangerouslySetInnerHTML={{ __html: `
-            @keyframes fadeInUp {
-              from { opacity: 0; transform: translateY(20px); }
-              to { opacity: 1; transform: translateY(0); }
-            }
-
-            .testimonial-card {
-              opacity: 0;
-              animation: fadeInUp 0.6s ease-out forwards;
-            }
-
-            .testimonial-card:nth-child(1) { animation-delay: 0.2s; }
-            .testimonial-card:nth-child(2) { animation-delay: 0.4s; }
-            .testimonial-card:nth-child(3) { animation-delay: 0.6s; }
-          `}} />
-        </div>
-      </section>
-
       {/* FAQ Section */}
-      <section className="py-20 bg-gradient-to-b from-white to-emerald-50 overflow-x-hidden">
+      <section className="py-16 md:py-24 overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-emerald-900 mb-4">
